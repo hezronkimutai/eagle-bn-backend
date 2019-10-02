@@ -1,22 +1,33 @@
 {
-  "name": "express-authorshaven",
+  "name": "barefoot-nomad",
   "version": "1.0.0",
   "description": "A Social platform for the creative at heart",
   "main": "index.js",
   "nyc": {
     "require": [
-      "esm"
+      "@babel/register"
     ]
   },
   "scripts": {
+    "start": "node ./src/index.js",
+    "test": "NODE_ENV=test nyc --reporter=html --reporter=text --reporter=lcov ./node_modules/.bin/mocha  ./src/tests/* --require @babel/register --timeout 5000 --exit",
     "db-migrate": "sequelize db:migrate --env production",
     "db-migrate:dev": "sequelize db:migrate --env development",
-    "db-migrate:test": "sequelize db:migrate:undo:all --env test && sequelize db:migrate --env test"
+    "db-migrate:test": "sequelize db:migrate:undo:all --env test && sequelize db:migrate --env test",
+    "lint": "eslint ./src/**/*.js"
   },
   "author": "Andela Simulations Programme",
   "license": "MIT",
   "dependencies": {
+    "@babel/cli": "^7.6.2",
+    "@babel/core": "^7.6.2",
+    "@babel/node": "^7.6.2",
+    "@babel/polyfill": "^7.6.0",
+    "@babel/preset-env": "^7.6.2",
+    "@babel/register": "^7.6.2",
     "body-parser": "^1.18.3",
+    "chai": "^4.2.0",
+    "chai-http": "^4.3.0",
     "cors": "^2.8.4",
     "dotenv": "^6.2.0",
     "errorhandler": "^1.5.0",
@@ -27,6 +38,11 @@
     "jsonwebtoken": "^8.3.0",
     "method-override": "^2.3.10",
     "methods": "^1.1.2",
+    "mocha": "^6.2.1",
+    "mongoose": "^5.2.2",
+    "mongoose-unique-validator": "^2.0.1",
+    "morgan": "^1.9.1",
+    "nyc": "^14.1.1",
     "passport": "^0.4.0",
     "passport-local": "^1.0.0",
     "pg": "^7.12.1",
@@ -39,6 +55,13 @@
   "devDependencies": {
     "eslint": "^6.5.0",
     "eslint-config-airbnb-base": "^14.0.0",
-    "eslint-plugin-import": "^2.18.2"
+    "eslint-plugin-import": "^2.18.2",
+    "husky": "^3.0.7"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run lint",
+      "pre-push": "npm test"
+    }
   }
 }
