@@ -10,6 +10,10 @@ Barefoot Nomad - Making company travel and accomodation easy and convinient.
 Make company global travel and accommodation easy and convenient for the strong workforce of savvy members of staff, by leveraging the modern web.
 
 ---
-## Deployment
-this will be deployed on heroku, To access the app on the cloud while it has been deployed use this link,
- [Production URL](eagle-bn-backend.herokuapp.com)
+
+## Docker set up
+ . [Install docker](https://docs.docker.com/docker-for-mac/install/)
+ . Clone repository to your local machine and run `npm install` to install all dependancies
+ . In .env file, provide variables for database ` GB-USER-NAME`, `DB-PASS` and `DB-DATABASE`
+ . While in development run `npm run dockerDev`
+ . While in production run `npm run dockerProd`

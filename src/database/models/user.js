@@ -1,7 +1,36 @@
 'use strict';
+/**
+ * @swagger
+ *
+ * definitions:
+ *   User:
+ *     type: object
+ *     required:
+ *       - email
+ *       - password
+ *       - username
+ *     properties:
+ *       username:
+ *         type: string
+ *       email:
+ *         type: string
+ *       password:
+ *         type: string
+ *         format: password
+ *       createdAt:
+ *         type: string
+ *       updatedAt: 
+ *         type: string
+ *       token:
+ *         type: string
+ */
+
 module.exports = (sequelize, DataTypes) => {
-  const User = sequelize.define('User', {
-    example: DataTypes.STRING
+  const User = sequelize.define('Users', {
+    email: DataTypes.STRING,
+    password: DataTypes.STRING,
+    username: DataTypes.STRING,
+    isverified: DataTypes.BOOLEAN
   }, { freezeTableName: true });
   User.associate = function(models) {
     // associations can be defined here

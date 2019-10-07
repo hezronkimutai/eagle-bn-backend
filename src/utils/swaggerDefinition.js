@@ -1,15 +1,15 @@
 import swaggerJsdoc from 'swagger-jsdoc';
 import swaggerUi from 'swagger-ui-express';
 
-const setupSwagger = (app, port) => {
+const setupSwagger = (app, address) => {
   const swaggerDefinition = {
     info: {
       title: 'Barefoot Nomad',
       version: '1.0.0',
       description: 'Make company global travel and accommodation easy and convenient for the strong workforce of savvy members of staff, by leveraging the modern web.',
     },
-    host: `localhost:${port}`,
-    basePath: '/',
+    host: `localhost:${address.port}`,
+    basePath: '/api/v1',
     securityDefinitions: {
       bearerAuth: {
         type: 'apiKey',
@@ -21,7 +21,7 @@ const setupSwagger = (app, port) => {
   };
   const options = {
     swaggerDefinition,
-    apis: ['./src/routes/**/*.js', './src/models/**/*.js'],
+    apis: ['./src/routes/**/*.js', './src/database/models/**/*.js'],
   };
   const swaggerSpec = swaggerJsdoc(options);
 
