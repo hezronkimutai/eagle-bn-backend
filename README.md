@@ -17,3 +17,8 @@ Make company global travel and accommodation easy and convenient for the strong 
  . In .env file, provide variables for database ` GB-USER-NAME`, `DB-PASS` and `DB-DATABASE`
  . While in development run `npm run dockerDev`
  . While in production run `npm run dockerProd`
+ 
+## Deployment
+this will be deployed on heroku, To access the app on the cloud while it has been deployed use this link,
+ [Production URL](eagle-bn-backend.herokuapp.com)
+
