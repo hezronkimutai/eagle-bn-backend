@@ -40,5 +40,11 @@ export default [
     password: '1234567890M@@',
     email: 'lemoissonmetre@gmail.com',
     confirmPassword: 'lelelelelel'
+  },
+  {
+    username: 'l ',
+    password: '1@Mjjjjjjjjj ',
+    email: 'lemoissonmetre@gmail.com',
+    confirmPassword: 'lelelelelel'
   }
 ];

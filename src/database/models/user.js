@@ -24,6 +24,27 @@
  *       token:
  *         type: string
  */
+/**
+ * @swagger
+ *
+ * definitions:
+ *   login:
+ *     type: object
+ *     required:
+ *       - userid
+ *       - username
+ *       - email
+ *     properties:
+ *       userid:
+ *         type: string
+ *       username:
+ *         type: string
+ *       email:
+ *         type: string
+ *       token:
+ *         type: string
+ */
+
 
 module.exports = (sequelize, DataTypes) => {
   const User = sequelize.define('Users', {

@@ -1,6 +1,7 @@
 /* eslint-disable require-jsdoc */
 import jwt from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
+import '@babel/polyfill';
 
 const helper = {
   createToken(userId, email, verified) {
@@ -22,6 +23,13 @@ const helper = {
     }
     return undefined;
   },
-  comparePassword(password, hash) { return bcrypt.compareSync(password, hash, (err, res) => res); }
+  comparePassword(password, hash) { return bcrypt.compareSync(password, hash, (err, res) => res); },
+  async decodeToken(token) {
+    const data = await jwt.verify(token, process.env.PRIVATE_KEY, (err, decoded) => {
+      if (err) return { error: err.message };
+      return decoded;
+    });
+    return data;
+  }
 };
 export default helper;

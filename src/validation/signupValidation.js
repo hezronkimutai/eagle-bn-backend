@@ -4,9 +4,9 @@ import sendResult from '../utils/sendResult';
 const validateSignup = (req, res, next) => {
   const valid = [
     new Check({ email: req }).req().email(),
-    new Check({ username: req }).req().str().min(2),
+    new Check({ username: req }).req().min(2).alpha(),
     new Check({ password: req }).req().alphaNum().min(8),
-    new Check({ confirmPassword: req }).req(),
+    new Check({ confirmPassword: req }).str().req(),
   ];
   // eslint-disable-next-line arrow-parens
   const invalid = valid.find(e => e.error);

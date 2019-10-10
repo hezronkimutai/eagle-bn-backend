@@ -16,6 +16,7 @@
       "indent": [ 1, 2 ],
       "comma-dangle": 0,
       "curly": ["error", "multi-line"],
+      "no-unused-expressions": "off",
       "import/no-dynamic-require": 0,
       "eol-last": 1,
       "import/no-unresolved": [2, { "commonjs": true }],

@@ -100,4 +100,14 @@ describe('signup', () => {
         done();
       });
   });
+  it('should return a 400 status when password lenght is less than 2', (done) => {
+    chai.request(app)
+      .post('/api/v1/users/signup')
+      .send(mockData[8])
+      .end((err, res) => {
+        expect(res.status).to.equal(400);
+        expect(res.body.msg).to.equal('username should be alphabetic and have 2 character minimum');
+        done();
+      });
+  });
 });
