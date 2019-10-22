@@ -44,6 +44,20 @@ const validator = {
     }
   },
 
+  searchValidate(req, res, next) {
+    try {
+      new Check({ description: req }).str().req().min(5);
+      new Check({ UserId: req }).str().req().min(5);
+      new Check({ destination: req }).str().req().min(5);
+      new Check({ origin: req }).req().num();
+      new Check({ duration: req }).str().req().min(5);
+      new Check({ status: req }).str().req().min(5);
+      new Check({ start_date: req }).str().req().min(5);
+      next();
+    } catch (error) {
+      return sendResult(res, 400, error.message);
+    }
+  },
 };
-
+// request ID, owner, destination, origin, duration, start date, request status
 export default validator;

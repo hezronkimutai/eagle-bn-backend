@@ -4,7 +4,7 @@
 class Validate {
   constructor(data) {
     this.key = Object.keys(data);
-    this.val = Object.values(data)[0].body[this.key];
+    this.val = Object.values(data)[0].body[this.key] || Object.values(data)[0].query[this.key];
     this.status = 200;
     this.data = Object.entries(data)[0][1].body;
   }

@@ -1,6 +1,7 @@
 import express from 'express';
 import requestController from '../controllers/requestController';
 import { isUserVerified } from '../middlewares';
+import UserMiddle from '../middlewares/userMiddlware';
 
 const app = express.Router();
 
@@ -28,7 +29,9 @@ const app = express.Router();
  *       400:
  *         description: Wrong data sent
  */
+const { verifyToken, getUserbyEmail } = UserMiddle;
 
 app.get('/', isUserVerified, requestController.getRequest);
+app.get('/search', verifyToken, getUserbyEmail, requestController.search);
 
 export default app;
