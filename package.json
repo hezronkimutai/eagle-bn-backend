@@ -13,10 +13,8 @@
       "text"
     ],
     "exclude": [
-      "**/**/**/swaggerDefinition.js",
-      "**/**/**/index.js",
-      "**/**/**/sendResult.js",
-      "**/**/**/validator.js"
+      "**/**/utils/*.js",
+      "**/**/**/index.js"
     ],
     "sourceMap": false,
     "instrument": false

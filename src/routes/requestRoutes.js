@@ -75,14 +75,14 @@ const app = express.Router();
  */
 
 const { checkExistingTrip, checkLineManager, checkManagerId } = reqMidd;
-const { changeRequestStatus, getManagerRequests } = requestController;
+const { changeRequestStatus, getManagerRequests, search } = requestController;
 const { checkManager } = roles;
-const { checkToken, verifyToken, getUserbyEmail } = userMidd;
-const { tripValidation } = valid;
+const { checkToken, verifyToken } = userMidd;
+const { tripValidation, searchValidate } = valid;
 
 app.get('/', isUserVerified, requestController.getRequest);
 app.get('/managers/:managerId', checkToken, checkManager, checkManagerId, getManagerRequests);
 app.patch('/:requestId/:status', checkToken, checkManager, checkExistingTrip, checkLineManager, tripValidation, changeRequestStatus);
-app.get('/search', verifyToken, getUserbyEmail, requestController.search);
+app.get('/search', verifyToken, searchValidate, search);
 
 export default app;

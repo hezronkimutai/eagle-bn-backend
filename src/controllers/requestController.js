@@ -4,7 +4,7 @@
 /* eslint-disable max-len */
 import db from '../database/models';
 import sendResult from '../utils/sendResult';
-import reqData from '../utils/getReqWithTrip';
+import requestData from '../utils/getReqWithTrip';
 
 const Request = {
   async getRequest(req, res) {
@@ -44,13 +44,16 @@ const Request = {
   },
 
   async search(req, res) {
-    const data = await reqData(req);
-    const entries = Object.entries(req.query);
-    let newData;
-    for (const [key, value] of entries) {
-      newData = data.filter((e) => e[key].match(value));
+    const { tripData, reqData } = requestData(req.query);
+    if (req.user.role !== 'admin' || req.user.role !== 'admin') {
+      tripData.UserId = req.user.userId;
     }
-    return sendResult(res, 200, 'Requests', newData);
+    const request = await db.Requests.findAll({
+      where: reqData,
+      include: [{ model: db.Trips, where: tripData, required: true }]
+    });
+
+    return sendResult(res, 200, 'Search results', request);
   }
 
 };

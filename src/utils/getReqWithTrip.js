@@ -1,18 +1,22 @@
-/* eslint-disable guard-for-in */
-/* eslint-disable no-await-in-loop */
 /* eslint-disable no-restricted-syntax */
-import db from '../database/models';
+import Sequelize from 'sequelize';
 
-const getReqsWithTrips = async () => {
-  const requests = await db.Requests.findAll({ raw: true });
+const { Op } = Sequelize;
 
-  for (const i in requests) {
-    requests[i].Trips = await db.Trips.findAll({
-      where: { RequestId: requests[i].id },
-      raw: true,
-    });
+const getReqsWithTrips = (query) => {
+  const entries = Object.entries(query);
+  const newData = {};
+  for (const [key, value] of entries) {
+    newData[key] = value;
   }
-  return requests;
+  const { destination, reason, ...reqData } = newData;
+  const {
+    status, address, id, ...tripData
+  } = newData;
+  if (tripData.reason) {
+    tripData.reason = { [Op.like]: `${tripData.reason}%` };
+  }
+  return { tripData, reqData };
 };
 
 export default getReqsWithTrips;
