@@ -8,17 +8,23 @@
       "@babel/register",
       "@babel/polyfill"
     ],
+    "reporter": [
+      "lcov",
+      "text"
+    ],
     "exclude": [
       "**/**/**/swaggerDefinition.js",
       "**/**/**/index.js",
       "**/**/**/sendResult.js",
       "**/**/**/validator.js"
-    ]
+    ],
+    "sourceMap": false,
+    "instrument": false
   },
   "scripts": {
     "start": "babel-node ./src/index.js",
     "dev": "nodemon --exec babel-node ./src/index",
-    "test": "npm run db-migrate:test && npm run db-seeder:test && NODE_ENV=test nyc --reporter=html --reporter=text --reporter=lcov ./node_modules/.bin/mocha  ./src/tests/* --require @babel/register --timeout 50000 --exit",
+    "test": "npm run db-migrate:test && npm run db-seeder:test &&  NODE_ENV=test nyc --reporter=html --reporter=text --reporter=lcov ./node_modules/.bin/mocha  ./src/tests/* --require @babel/register --timeout 50000 --exit",
     "coveralls": "nyc report --reporter=text-lcov | coveralls",
     "db-migrate": "sequelize db:migrate --env production",
     "db-migrate:dev": "sequelize db:migrate --env development",
@@ -78,6 +84,7 @@
     "@babel/plugin-transform-runtime": "^7.6.2",
     "@babel/runtime": "^7.6.2",
     "babel-loader": "^8.0.6",
+    "babel-plugin-istanbul": "^5.2.0",
     "eslint": "^6.5.0",
     "eslint-config-airbnb-base": "^14.0.0",
     "eslint-plugin-import": "^2.18.2",

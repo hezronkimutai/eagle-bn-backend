@@ -44,6 +44,17 @@ const validator = {
     }
   },
 
+  tripValidation(req, res, next) {
+    let { status } = req.params;
+    status = status.toLowerCase();
+    if (status !== 'approve' && status !== 'reject') {
+      return sendResult(res, 400, 'invalid request');
+    }
+    if (status === 'approve') req.params.status = 'approved';
+    if (status === 'reject') req.params.status = 'rejected';
+    return next();
+  },
+
   searchValidate(req, res, next) {
     try {
       new Check({ description: req }).str().req().min(5);
@@ -57,7 +68,8 @@ const validator = {
     } catch (error) {
       return sendResult(res, 400, error.message);
     }
-  },
+  }
+
 };
 // request ID, owner, destination, origin, duration, start date, request status
 export default validator;

@@ -29,13 +29,14 @@ const User = {
   },
 
   async getUserbyEmail(req, res, next) {
-    const { dataValues } = await db.Users.findOne({
-      where: { email: req.body.email || req.user.email }
+    const user = await db.Users.findOne({
+      where: { email: req.body.email || req.user.email },
+      raw: true,
     });
 
-    if (!dataValues) return sendResult(res, 409, 'User with email not found');
+    if (!user) return sendResult(res, 409, 'User with email not found');
 
-    req.user = dataValues;
+    req.user = user;
     next();
   },
 

@@ -85,7 +85,7 @@ describe('accommodation tests', () => {
       .set('Authorization', helper.createToken(2, 'mmmm@gmail.com', true, 'requester'))
       .end((err, res) => {
         expect(res.status).to.equal(401);
-        expect(res.body.msg).to.equals('You are not authorized');
+        expect(res.body.msg).to.equals('you are not authorized');
         done();
       });
   });

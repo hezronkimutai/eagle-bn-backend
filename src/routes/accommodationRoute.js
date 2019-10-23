@@ -5,6 +5,7 @@ import accommodationCont from '../controllers/accommodationController';
 import accMidd from '../middlewares/accommodationMiddleware';
 import userMidd from '../middlewares/userMiddlware';
 import valid from '../validation';
+import roles from '../middlewares/rolesMiddlewares';
 
 const app = express.Router();
 
@@ -79,11 +80,11 @@ const fUpload = fileUpload({
   tempFileDir: path.join(__dirname, '../temp'),
 });
 
-const { checkUserSupplier, checkForImages } = accMidd;
+const { checkForImages } = accMidd;
 const { checkToken } = userMidd;
 const { addAccommodation, getAccommodation } = accommodationCont;
 
-app.post('/', fUpload, checkToken, checkUserSupplier, valid.accommodation, checkForImages, addAccommodation);
+app.post('/', fUpload, checkToken, roles.checkHost, valid.accommodation, checkForImages, addAccommodation);
 app.get('/', checkToken, accMidd.checkViewAccommodation, getAccommodation);
 
 export default app;

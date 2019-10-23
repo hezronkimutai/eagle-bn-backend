@@ -11,7 +11,7 @@ describe('get requests test', () => {
   it('get all requests, should return a 200 status', (done) => {
     chai.request(app)
       .get('/api/v1/requests/')
-      .set('Authorization', helper.createToken(1, 'alexismajyambere@gmail.com', true))
+      .set('Authorization', helper.createToken(2, 'alexismajyambere@gmail.com', true))
       .end((err, res) => {
         expect(res.status).to.equal(200);
         expect(res.body.msg).to.equal('Requests');

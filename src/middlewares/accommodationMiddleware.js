@@ -1,12 +1,6 @@
 import sendResult from '../utils/sendResult';
 
 const Accommodation = {
-  checkUserSupplier(req, res, next) {
-    const { userData } = req;
-    if (userData.role === 'host') return next();
-    return sendResult(res, 401, 'You are not authorized');
-  },
-
   checkViewAccommodation(req, res, next) {
     const { userData } = req;
     if (userData.role === 'host' || userData.role === 'TAdmin') {

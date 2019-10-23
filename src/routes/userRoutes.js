@@ -4,9 +4,13 @@ import fileUpload from 'express-fileupload';
 import path from 'path';
 import userController from '../controllers/userController';
 import email from '../controllers/email';
+import checkRole from '../validation/checkRoles';
+import role from '../controllers/role';
+import checkAdmin from '../middlewares/checkAdminRole';
 import UserMiddle from '../middlewares/userMiddlware';
 import valid from '../validation';
 import '../config/passport';
+import isUserVerified from '../middlewares/checkIsverified';
 
 const app = express.Router();
 
@@ -286,6 +290,56 @@ app.use(passport.initialize());
  *       400:
  *         description: Wrong data sent
  */
+/**
+* @swagger
+* /users/role:
+*    put:
+*      description: 'TODO: Add Description'
+*      summary: change role
+*      tags:
+*      - Misc
+*      operationId: RolePut
+*      deprecated: false
+*      produces:
+*      - application/json
+*      parameters:
+*      - name: Content-Type
+*        in: header
+*        required: true
+*        type: string
+*        description: ''
+*      - name: Authorization
+*        in: header
+*        required: true
+*        type: string
+*        description: ''
+*      - name: Body
+*        in: body
+*        required: true
+*        description: ''
+*        schema:
+*          $ref: '#/definitions/changerolerequest'
+*      responses:
+*        200:
+*          description: ''
+*          headers: {}
+*      security: []
+* definitions:
+*   changerolerequest:
+*     title: changerolerequest
+*     example:
+*       email: nshimyumukizachristian@gmail.com
+*       new_role: host
+*     type: object
+*     properties:
+*       email:
+*         type: string
+*       new_role:
+*         type: string
+*     required:
+*     - email
+*     - new_role
+* */
 
 const uploadfile = fileUpload({
   useTempFiles: true,
@@ -304,5 +358,8 @@ app.post('/auth/facebook', passport.authenticate('facebook-token'), userControll
 app.post('/auth/google', passport.authenticate('google-plus-token'), userController.OauthLogin);
 app.get('/profile', verifyToken, getUserbyEmail, getProfile);
 app.patch('/profile', uploadfile, verifyToken, valid.profile, cloudUpload, updateProfile);
+app.put('/role', checkRole, checkAdmin, UserMiddle.getUserbyEmail, isUserVerified, role.changeRole);
+app.get('/roles', checkAdmin, role.allRole);
 
 export default app;
+
