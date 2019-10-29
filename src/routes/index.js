@@ -1,7 +1,7 @@
 import express from 'express';
-import userRouter from './userRoutes';
-import accommodationRouter from './accommodationRoute';
-import requestRouter from './requestRoutes';
+import userRouter from './user.route';
+import accommodationRouter from './accommodation.route';
+import requestRouter from './request.route';
 
 const app = express.Router();
 

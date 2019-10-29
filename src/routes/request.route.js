@@ -1,11 +1,11 @@
 import express from 'express';
-import requestController from '../controllers/requestController';
+import requestController from '../controllers/requests.controller';
 import valid from '../validation';
 import { validateTrips, validateAccommodation } from '../validation/trips';
-import reqMidd from '../middlewares/requestMiddlware';
-import userMidd from '../middlewares/userMiddlware';
-import roles from '../middlewares/rolesMiddlewares';
-import comment from '../controllers/commentController';
+import reqMidd from '../middlewares/request.middlware';
+import userMidd from '../middlewares/user.middlware';
+import roles from '../middlewares/role.middleware';
+import comment from '../controllers/comments.controller';
 
 const app = express.Router();
 

@@ -1,11 +1,11 @@
 import express from 'express';
 import fileUpload from 'express-fileupload';
 import path from 'path';
-import accommodationCont from '../controllers/accommodationController';
-import accMidd from '../middlewares/accommodationMiddleware';
-import userMidd from '../middlewares/userMiddlware';
-import valid from '../validation';
-import roles from '../middlewares/rolesMiddlewares';
+import AccommodationsController from '../controllers/accommodations.controller';
+import AccommodationMiddleware from '../middlewares/accommodation.middleware';
+import UserMiddlware from '../middlewares/user.middlware';
+import validate from '../validation';
+import RoleMiddleware from '../middlewares/role.middleware';
 
 const app = express.Router();
 
@@ -81,16 +81,16 @@ const fUpload = fileUpload({
 });
 
 const {
-  isSupplierAccommodation, checkForImages, checkForImagesUpdate
-} = accMidd;
-const { checkToken } = userMidd;
+  isSupplierAccommodation, checkForImages, checkForImagesUpdate, checkViewAccommodation
+} = AccommodationMiddleware;
+const { checkToken } = UserMiddlware;
 const {
   addAccommodation, getAccommodation, deleteAccommodation, editAccommodation
-} = accommodationCont;
+} = AccommodationsController;
 
-app.patch('/:id', fUpload, checkToken, roles.checkHost, isSupplierAccommodation, checkForImagesUpdate, valid.editAccommodation, editAccommodation);
-app.delete('/:id', checkToken, roles.checkHost, isSupplierAccommodation, deleteAccommodation);
-app.post('/', fUpload, checkToken, roles.checkHost, valid.accommodation, checkForImages, addAccommodation);
-app.get('/', checkToken, accMidd.checkViewAccommodation, getAccommodation);
+app.patch('/:id', fUpload, checkToken, RoleMiddleware.checkHost, isSupplierAccommodation, checkForImagesUpdate, validate.editAccommodation, editAccommodation);
+app.delete('/:id', checkToken, RoleMiddleware.checkHost, isSupplierAccommodation, deleteAccommodation);
+app.post('/', fUpload, checkToken, RoleMiddleware.checkHost, validate.accommodation, checkForImages, addAccommodation);
+app.get('/', checkToken, checkViewAccommodation, getAccommodation);
 
 export default app;
