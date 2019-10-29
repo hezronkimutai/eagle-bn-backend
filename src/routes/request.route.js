@@ -1,23 +1,18 @@
 import express from 'express';
-import RequestsController from '../controllers/requests.controller';
+import RequestController from '../controllers/requests.controller';
 import valid from '../validation';
 import { validateTrips, validateAccommodation } from '../validation/trips';
-import reqMidd from '../middlewares/request.middlware';
-import userMidd from '../middlewares/user.middlware';
-import roles from '../middlewares/role.middleware';
-import comment from '../controllers/comments.controller';
+import RequestMiddleware from '../middlewares/request.middleware';
+import UserMiddleware from '../middlewares/user.middleware';
+import RoleMiddleware from '../middlewares/role.middleware';
+import CommentsController from '../controllers/comments.controller';
 
 const app = express.Router();
 
-const { checkExistingTrip, checkLineManager, checkManagerId, checkTripOwner } = reqMidd;
-const {
-  changeRequestStatus,
-  getManagerRequests,
-  getSingleRequest,
-  postRequest,
-  getRequest } = RequestsController;
-const { checkManager, checkRequester } = roles;
-const { checkToken } = userMidd;
+const { checkExistingTrip, checkLineManager, checkManagerId, checkTripOwner } = RequestMiddleware;
+const { changeRequestStatus, getManagerRequests } = RequestController;
+const { checkManager, checkRequester } = RoleMiddleware;
+const { checkToken } = UserMiddleware;
 const {
   addCommentValidation,
   viewCommentValidation,
@@ -25,12 +20,13 @@ const {
   singleReqValid,
   managerValid
 } = valid;
-const { addComment, viewComment } = comment;
+const { addComment, viewComment } = CommentsController;
 
-app.get('/:requestId', singleReqValid, checkToken, checkExistingTrip, checkTripOwner, getSingleRequest);
-app.get('/', checkToken, checkRequester, getRequest);
+
+app.get('/:requestId', singleReqValid, checkToken, checkExistingTrip, checkTripOwner, RequestController.getSingleRequest);
+app.get('/', checkToken, checkRequester, RequestController.getRequest);
 /* eslint-disable max-len */
-app.post('/', checkToken, checkRequester, valid.request, validateTrips, validateAccommodation, postRequest);
+app.post('/', checkToken, checkRequester, valid.request, validateTrips, validateAccommodation, RequestController.postRequest);
 app.get('/managers/:managerId', managerValid, checkToken, checkManager, checkManagerId, getManagerRequests);
 app.patch('/:requestId/:status', singleReqValid, checkToken, checkManager, checkExistingTrip, checkLineManager, tripValidation, changeRequestStatus);
 app.post('/:requestId/comments', addCommentValidation, checkToken, checkExistingTrip, checkTripOwner, addComment);
