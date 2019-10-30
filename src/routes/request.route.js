@@ -1,11 +1,11 @@
 import express from 'express';
-import requestsController from '../controllers/requests.controller';
+import RequestsController from '../controllers/requests.controller';
 import valid from '../validation';
 import { validateTrips, validateAccommodation } from '../validation/trips';
-import reqMidd from '../middlewares/requestMiddlware';
-import userMidd from '../middlewares/userMiddlware';
-import roles from '../middlewares/rolesMiddlewares';
-import comment from '../controllers/commentController';
+import reqMidd from '../middlewares/request.middlware';
+import userMidd from '../middlewares/user.middlware';
+import roles from '../middlewares/role.middleware';
+import comment from '../controllers/comments.controller';
 
 const app = express.Router();
 
@@ -15,7 +15,7 @@ const {
   getManagerRequests,
   getSingleRequest,
   postRequest,
-  getRequest } = requestsController;
+  getRequest } = RequestsController;
 const { checkManager, checkRequester } = roles;
 const { checkToken } = userMidd;
 const {

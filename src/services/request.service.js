@@ -1,6 +1,6 @@
 import db from '../database/models/index';
 
-export default {
+const RequestService = {
   async getAllRequestByUserId(userId) {
     const result = await db.Requests.findAll({
       where: { UserId: userId },
@@ -55,3 +55,4 @@ export default {
   }
 };
 
+export default RequestService;

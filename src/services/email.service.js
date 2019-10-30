@@ -5,7 +5,7 @@ const sendMail = async (req, url, title, emailMsg, actionMsg) => {
   const email = await transporter.sendMail(message);
   return email;
 };
-export default {
+const EmailService = {
   async sendRequestStatusMail(req, newRequest) {
     const title = `Request ${newRequest.status}`;
     const url = `/api/v1/requests/${newRequest.id}`;
@@ -15,3 +15,5 @@ export default {
     return emailResult;
   },
 };
+
+export default EmailService;
