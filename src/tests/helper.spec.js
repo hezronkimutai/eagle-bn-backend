@@ -1,6 +1,6 @@
 import chai from 'chai';
 import helpers from '../utils/helper';
-import userController from '../controllers/userController';
+import UsersController from '../controllers/users.controller';
 
 const { expect } = chai;
 const plainPassword = 'lemoissonW';
@@ -19,7 +19,7 @@ describe('helper functions', () => {
     done();
   });
   it('should return a jwt token when called', (done) => {
-    expect(userController).to.haveOwnProperty('signup');
+    expect(UsersController).to.haveOwnProperty('signup');
     done();
   });
 });
