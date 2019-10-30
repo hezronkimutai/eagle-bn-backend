@@ -80,17 +80,9 @@ const fUpload = fileUpload({
   tempFileDir: path.join(__dirname, '../temp'),
 });
 
-const {
-  isSupplierAccommodation, checkForImages, checkForImagesUpdate, checkViewAccommodation
-} = AccommodationMiddleware;
-const { checkToken } = UserMiddlware;
-const {
-  addAccommodation, getAccommodation, deleteAccommodation, editAccommodation
-} = AccommodationsController;
-
-app.patch('/:id', fUpload, checkToken, RoleMiddleware.checkHost, isSupplierAccommodation, checkForImagesUpdate, validate.editAccommodation, editAccommodation);
-app.delete('/:id', checkToken, RoleMiddleware.checkHost, isSupplierAccommodation, deleteAccommodation);
-app.post('/', fUpload, checkToken, RoleMiddleware.checkHost, validate.accommodation, checkForImages, addAccommodation);
-app.get('/', checkToken, checkViewAccommodation, getAccommodation);
+app.patch('/:id', fUpload, UserMiddlware.checkToken, RoleMiddleware.checkHost, AccommodationMiddleware.isSupplierAccommodation, AccommodationMiddleware.checkForImagesUpdate, validate.editAccommodation, AccommodationsController.editAccommodation);
+app.delete('/:id', UserMiddlware.checkToken, RoleMiddleware.checkHost, AccommodationMiddleware.isSupplierAccommodation, AccommodationsController.deleteAccommodation);
+app.post('/', fUpload, UserMiddlware.checkToken, RoleMiddleware.checkHost, validate.accommodation, AccommodationMiddleware.checkForImages, AccommodationsController.addAccommodation);
+app.get('/', UserMiddlware.checkToken, AccommodationMiddleware.checkViewAccommodation, AccommodationsController.getAccommodation);
 
 export default app;

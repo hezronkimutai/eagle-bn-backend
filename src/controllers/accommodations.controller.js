@@ -60,9 +60,9 @@ const Accommodation = {
 
   async deleteAccommodation(req, res) {
     await AccommodationService.deleteAccommodationById(req.params.id);
-    const returnAccommo = await AccommodationService.getAccommodationById(req.params.id);
-    if (!returnAccommo) {
-      return sendResult(res, 200, 'The accommodation facility data has been deleted', returnAccommo);
+    const accommodation = await AccommodationService.getAccommodationById(req.params.id);
+    if (!accommodation) {
+      return sendResult(res, 200, 'The accommodation facility data has been deleted', accommodation);
     }
   },
 
