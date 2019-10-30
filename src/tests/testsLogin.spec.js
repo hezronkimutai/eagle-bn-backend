@@ -3,7 +3,7 @@ import chaiHttp from 'chai-http';
 import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
 import { describe, it } from 'mocha';
-import User from '../controllers/users.controller';
+import UsersController from '../controllers/users.controller';
 import OAuthCallback from '../utils/OAuthCallback';
 import myserver from '../index';
 import mock from './mockData/loginMockData';
@@ -88,7 +88,7 @@ describe('Oauthentication CallBack', () => {
 
     const res = { status() {}, json() {}, };
     sinon.stub(res, 'status').returnsThis();
-    await User.OauthLogin(req, res);
+    await UsersController.OauthLogin(req, res);
     expect(res.status).to.have.been.calledWith(201);
   });
 

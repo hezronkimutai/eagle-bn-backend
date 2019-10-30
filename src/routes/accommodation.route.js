@@ -1,11 +1,11 @@
 import express from 'express';
 import fileUpload from 'express-fileupload';
 import path from 'path';
-import accommodationCont from '../controllers/accommodationController';
-import accMidd from '../middlewares/accommodationMiddleware';
-import userMidd from '../middlewares/userMiddlware';
-import valid from '../validation';
-import roles from '../middlewares/rolesMiddlewares';
+import AccommodationsController from '../controllers/accommodations.controller';
+import AccommodationMiddleware from '../middlewares/accommodation.middleware';
+import UserMiddlware from '../middlewares/user.middlware';
+import validate from '../validation';
+import RoleMiddleware from '../middlewares/role.middleware';
 
 const app = express.Router();
 
@@ -80,17 +80,9 @@ const fUpload = fileUpload({
   tempFileDir: path.join(__dirname, '../temp'),
 });
 
-const {
-  isSupplierAccommodation, checkForImages, checkForImagesUpdate
-} = accMidd;
-const { checkToken } = userMidd;
-const {
-  addAccommodation, getAccommodation, deleteAccommodation, editAccommodation
-} = accommodationCont;
-
-app.patch('/:id', fUpload, checkToken, roles.checkHost, isSupplierAccommodation, checkForImagesUpdate, valid.editAccommodation, editAccommodation);
-app.delete('/:id', checkToken, roles.checkHost, isSupplierAccommodation, deleteAccommodation);
-app.post('/', fUpload, checkToken, roles.checkHost, valid.accommodation, checkForImages, addAccommodation);
-app.get('/', checkToken, accMidd.checkViewAccommodation, getAccommodation);
+app.patch('/:id', fUpload, UserMiddlware.checkToken, RoleMiddleware.checkHost, AccommodationMiddleware.isSupplierAccommodation, AccommodationMiddleware.checkForImagesUpdate, validate.editAccommodation, AccommodationsController.editAccommodation);
+app.delete('/:id', UserMiddlware.checkToken, RoleMiddleware.checkHost, AccommodationMiddleware.isSupplierAccommodation, AccommodationsController.deleteAccommodation);
+app.post('/', fUpload, UserMiddlware.checkToken, RoleMiddleware.checkHost, validate.accommodation, AccommodationMiddleware.checkForImages, AccommodationsController.addAccommodation);
+app.get('/', UserMiddlware.checkToken, AccommodationMiddleware.checkViewAccommodation, AccommodationsController.getAccommodation);
 
 export default app;

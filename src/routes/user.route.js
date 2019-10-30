@@ -7,7 +7,7 @@ import email from '../controllers/email';
 import checkRole from '../validation/checkRoles';
 import role from '../controllers/role';
 import checkAdmin from '../middlewares/checkAdminRole';
-import UserMiddle from '../middlewares/userMiddlware';
+import UserMiddleware from '../middlewares/user.middlware';
 import valid from '../validation';
 import '../config/passport';
 import isUserVerified from '../middlewares/checkIsverified';
@@ -346,19 +346,19 @@ const uploadfile = fileUpload({
   tempFileDir: path.join(__dirname, '../temp'),
 });
 
-const { verifyToken, cloudUpload, getUserbyEmail } = UserMiddle;
+const { verifyToken, cloudUpload, getUserbyEmail } = UserMiddleware;
 const { updateProfile, getProfile } = UsersController;
 
-app.post('/signup', valid.signup, UserMiddle.checkuserExist, UsersController.signup);
-app.post('/login', UserMiddle.checkloginEntries, UsersController.login);
+app.post('/signup', valid.signup, UserMiddleware.checkuserExist, UsersController.signup);
+app.post('/login', UserMiddleware.checkloginEntries, UsersController.login);
 app.get('/verify/:token', UsersController.verifyEmail);
-app.post('/reset-password', UserMiddle.validateEmail, UserMiddle.getUserbyEmail, email.sendReset);
-app.patch('/reset-password/:token', UserMiddle.validatePass, email.resetPass);
+app.post('/reset-password', UserMiddleware.validateEmail, UserMiddleware.getUserbyEmail, email.sendReset);
+app.patch('/reset-password/:token', UserMiddleware.validatePass, email.resetPass);
 app.post('/auth/facebook', passport.authenticate('facebook-token'), UsersController.OauthLogin);
 app.post('/auth/google', passport.authenticate('google-plus-token'), UsersController.OauthLogin);
 app.get('/profile', verifyToken, getUserbyEmail, getProfile);
 app.patch('/profile', uploadfile, verifyToken, valid.profile, cloudUpload, updateProfile);
-app.put('/role', checkRole, checkAdmin, UserMiddle.getUserbyEmail, isUserVerified, role.changeRole);
+app.put('/role', checkRole, checkAdmin, UserMiddleware.getUserbyEmail, isUserVerified, role.changeRole);
 app.get('/roles', checkAdmin, role.allRole);
 
 export default app;
