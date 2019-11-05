@@ -1,10 +1,10 @@
 import express from 'express';
 import BookingsController from '../controllers/bookings.controller';
 import BookingMiddleware from '../middlewares/booking.middleware';
-import UserMiddleware from '../middlewares/userMiddlware';
+import UserMiddleware from '../middlewares/user.middleware';
 import validation from '../validation';
 import AccommodationMiddleware from '../middlewares/accommodation.middleware';
-import RequestMiddleware from '../middlewares/requestMiddlware';
+import RequestMiddleware from '../middlewares/request.middlware';
 
 const app = express.Router();
 

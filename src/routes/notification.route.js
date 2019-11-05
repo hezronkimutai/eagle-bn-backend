@@ -1,5 +1,5 @@
 import express from 'express';
-import UserMiddleware from '../middlewares/userMiddlware';
+import UserMiddleware from '../middlewares/user.middleware';
 import NotificationMiddleware from '../middlewares/notification.middleware';
 import NotificationController from '../controllers/notifications.controller';
 

@@ -2,7 +2,7 @@
 /* eslint-disable no-restricted-syntax */
 import db from '../database/models';
 import sendResult from '../utils/sendResult';
-import allRequest from '../utils/requestUtils';
+import RequestUtil from '../utils/requestUtils';
 import requestData from '../utils/getReqWithTrip';
 import RequestService from '../services/request.service';
 import NotificationService from '../services/notifications.service';
@@ -10,9 +10,9 @@ import UserService from '../services/user.service';
 import EmailService from '../services/email.service';
 
 const Request = {
-  async getRequest(req, res) {
+  async getRequests(req, res) {
     try {
-      const requests = await allRequest.getUserRequest(req.userData.userId);
+      const requests = await RequestService.getRequestUtilByUserId(req.userData.userId);
       return sendResult(res, 200, 'Requests', requests);
     } catch (err) {
       return sendResult(res, 400, 'something went wrong!');
@@ -28,8 +28,7 @@ const Request = {
     request.status = 'pending';
     request.timeZone = timeZone;
     if (returnTime) request.returnTime = returnTime;
-    let Req = await db.Requests.create(request);
-    Req = Req.get({ plain: true });
+    const Req = await RequestService.createRequest(request);
     const Trips = [];
     let index = 0;
     for (const trip of trips) {
@@ -40,7 +39,7 @@ const Request = {
       single.departureTime = trip.departureTime;
       single.RequestId = Req.id;
       // eslint-disable-next-line no-await-in-loop
-      Trips[index] = await db.Trips.create(single, { raw: true });
+      Trips[index] = await RequestService.createTrip(single);
       index += 1;
     }
     Req.trips = Trips;
@@ -73,7 +72,7 @@ const Request = {
     const { status } = req.params;
     const { request } = req;
     if (request.status === 'pending') {
-      const newRequest = await request.update({ status });
+      const newRequest = await RequestService.updateRequest({ id: request.id }, { status });
       return EmailService.requestedStatusUpdated(req, res, newRequest);
     }
     return sendResult(res, 403, 'this request is already approved/rejected');
@@ -86,18 +85,7 @@ const Request = {
   async getManagerRequests(req, res) {
     const { status } = req.query;
     const { managerId } = req.params;
-    const includeUser = { model: db.Users, attributes: ['id', 'email', 'lineManager'], where: { lineManager: managerId } };
-    let requests;
-    if (status) {
-      requests = await db.Requests.findAll({
-        where: { status },
-        include: [includeUser],
-      });
-    } else {
-      requests = await db.Requests.findAll({
-        include: [includeUser]
-      });
-    }
+    const requests = await RequestService.getRequestByManagerId(managerId, status);
     sendResult(res, 200, 'request list', requests);
   },
 
@@ -106,12 +94,9 @@ const Request = {
     if (req.user.role !== 'admin' && req.user.role !== 'Tadmin') {
       reqData.UserId = req.user.userId;
     }
-    const request = await db.Requests.findAll({
-      where: reqData,
-      include: [{ model: db.Trips, where: tripData, required: true }]
-    });
+    const requests = await RequestService.searchRequests(reqData, tripData);
 
-    return sendResult(res, 200, 'Search results', request);
+    return sendResult(res, 200, 'Search results', requests);
   },
 
   async updateRequest(req, res) {
@@ -124,8 +109,8 @@ const Request = {
       departureTime: new Date(trip.departureTime).toLocaleString(),
       reason
     };
-    const reqData = allRequest.getProvidedData(request);
-    const tripData = allRequest.getProvidedData(trips);
+    const reqData = RequestUtil.getProvidedData(request);
+    const tripData = RequestUtil.getProvidedData(trips);
     if (reqData) {
       const condition = { id: requestId, UserId: req.user.id, status: 'pending' };
       request = await RequestService.updateRequest(reqData, condition);
@@ -133,7 +118,7 @@ const Request = {
     if (tripData) {
       const condition = { id: tripId };
       trips = await RequestService.updateTrip(tripData, condition);
-      request[1].trip = trips[1];
+      request.trip = trips;
     }
     return sendResult(res, 200, 'request update successful', request[1]);
   },

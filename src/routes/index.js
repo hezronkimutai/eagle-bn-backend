@@ -1,7 +1,7 @@
 import express from 'express';
-import userRouter from './userRoutes';
+import userRouter from './user.routes';
 import accommodationRouter from './accommodationRoute';
-import requestRouter from './requestRoutes';
+import requestRouter from './request.routes';
 import bookingRouter from './booking.route';
 import notificationRouter from './notification.route';
 

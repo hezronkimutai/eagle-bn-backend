@@ -3,7 +3,7 @@ import chaiHttp from 'chai-http';
 import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
 import { describe, it } from 'mocha';
-import User from '../controllers/userController';
+import User from '../controllers/users.controller';
 import OAuthCallback from '../utils/OAuthCallback';
 import myserver from '../index';
 import mock from './mockData/loginMockData';

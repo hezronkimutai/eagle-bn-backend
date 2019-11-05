@@ -2,15 +2,8 @@
 /* eslint-disable no-loop-func */
 /* eslint-disable guard-for-in */
 /* eslint-disable no-restricted-syntax */
-import db from '../database/models';
 
 export default {
-  async getUserRequest(id) {
-    return db.Requests.findAll({
-      where: { UserId: id },
-      include: { model: db.Trips, attributes: { exclude: ['RequestId'] } } });
-  },
-
   getProvidedData(data) {
     const entries = Object.entries(data);
     data = {};
