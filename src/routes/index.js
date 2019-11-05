@@ -1,12 +1,12 @@
 import express from 'express';
-import userRouter from './user.route';
-import accommodationRouter from './accommodation.route';
-import requestRouter from './request.route';
+import UserRouter from './user.route';
+import AccommodationRouter from './accommodation.route';
+import RequestRouter from './request.route';
 
 const app = express.Router();
 
-app.use('/users', userRouter);
-app.use('/accommodations', accommodationRouter);
-app.use('/requests', requestRouter);
+app.use('/users', UserRouter);
+app.use('/accommodations', AccommodationRouter);
+app.use('/requests', RequestRouter);
 
 export default app;

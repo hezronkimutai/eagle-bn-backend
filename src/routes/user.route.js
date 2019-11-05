@@ -3,14 +3,14 @@ import passport from 'passport';
 import fileUpload from 'express-fileupload';
 import path from 'path';
 import UsersController from '../controllers/users.controller';
-import email from '../controllers/email';
+import EmailsController from '../controllers/emails.controller';
 import checkRole from '../validation/checkRoles';
-import role from '../controllers/role';
-import checkAdmin from '../middlewares/checkAdminRole';
-import UserMiddleware from '../middlewares/user.middlware';
+import RolesController from '../controllers/roles.controller';
+import CheckAdminMiddleware from '../middlewares/checkAdminRole.middleware';
+import UserMiddleware from '../middlewares/user.middleware';
 import valid from '../validation';
 import '../config/passport';
-import isUserVerified from '../middlewares/checkIsverified';
+import IsUserVerifiedMiddleware from '../middlewares/checkIsverified.middleware';
 
 const app = express.Router();
 
@@ -352,14 +352,14 @@ const { updateProfile, getProfile } = UsersController;
 app.post('/signup', valid.signup, UserMiddleware.checkuserExist, UsersController.signup);
 app.post('/login', UserMiddleware.checkloginEntries, UsersController.login);
 app.get('/verify/:token', UsersController.verifyEmail);
-app.post('/reset-password', UserMiddleware.validateEmail, UserMiddleware.getUserbyEmail, email.sendReset);
-app.patch('/reset-password/:token', UserMiddleware.validatePass, email.resetPass);
+app.post('/reset-password', UserMiddleware.validateEmail, UserMiddleware.getUserbyEmail, EmailsController.sendReset);
+app.patch('/reset-password/:token', UserMiddleware.validatePass, EmailsController.resetPass);
 app.post('/auth/facebook', passport.authenticate('facebook-token'), UsersController.OauthLogin);
 app.post('/auth/google', passport.authenticate('google-plus-token'), UsersController.OauthLogin);
 app.get('/profile', verifyToken, getUserbyEmail, getProfile);
 app.patch('/profile', uploadfile, verifyToken, valid.profile, cloudUpload, updateProfile);
-app.put('/role', checkRole, checkAdmin, UserMiddleware.getUserbyEmail, isUserVerified, role.changeRole);
-app.get('/roles', checkAdmin, role.allRole);
+app.put('/role', checkRole, CheckAdminMiddleware, UserMiddleware.getUserbyEmail, IsUserVerifiedMiddleware, RolesController.changeRole);
+app.get('/roles', CheckAdminMiddleware, RolesController.allRole);
 
 export default app;
 

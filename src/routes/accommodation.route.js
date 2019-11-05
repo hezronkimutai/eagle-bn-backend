@@ -3,8 +3,8 @@ import fileUpload from 'express-fileupload';
 import path from 'path';
 import AccommodationsController from '../controllers/accommodations.controller';
 import AccommodationMiddleware from '../middlewares/accommodation.middleware';
-import UserMiddlware from '../middlewares/user.middlware';
-import validate from '../validation';
+import UserMiddleware from '../middlewares/user.middleware';
+import valid from '../validation';
 import RoleMiddleware from '../middlewares/role.middleware';
 
 const app = express.Router();
@@ -80,9 +80,17 @@ const fUpload = fileUpload({
   tempFileDir: path.join(__dirname, '../temp'),
 });
 
-app.patch('/:id', fUpload, UserMiddlware.checkToken, RoleMiddleware.checkHost, AccommodationMiddleware.isSupplierAccommodation, AccommodationMiddleware.checkForImagesUpdate, validate.editAccommodation, AccommodationsController.editAccommodation);
-app.delete('/:id', UserMiddlware.checkToken, RoleMiddleware.checkHost, AccommodationMiddleware.isSupplierAccommodation, AccommodationsController.deleteAccommodation);
-app.post('/', fUpload, UserMiddlware.checkToken, RoleMiddleware.checkHost, validate.accommodation, AccommodationMiddleware.checkForImages, AccommodationsController.addAccommodation);
-app.get('/', UserMiddlware.checkToken, AccommodationMiddleware.checkViewAccommodation, AccommodationsController.getAccommodation);
+const {
+  isSupplierAccommodation, checkForImages, checkForImagesUpdate
+} = AccommodationMiddleware;
+const { checkToken } = UserMiddleware;
+const {
+  addAccommodation, getAccommodation, deleteAccommodation, editAccommodation
+} = AccommodationsController;
+
+app.patch('/:id', fUpload, checkToken, RoleMiddleware.checkHost, isSupplierAccommodation, checkForImagesUpdate, valid.editAccommodation, editAccommodation);
+app.delete('/:id', checkToken, RoleMiddleware.checkHost, isSupplierAccommodation, deleteAccommodation);
+app.post('/', fUpload, checkToken, RoleMiddleware.checkHost, valid.accommodation, checkForImages, addAccommodation);
+app.get('/', checkToken, AccommodationMiddleware.checkViewAccommodation, getAccommodation);
 
 export default app;
