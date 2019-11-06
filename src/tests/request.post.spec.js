@@ -55,7 +55,6 @@ describe('create request and new request notifications', () => {
       .set('Authorization', helper.createToken(5, 'manager@gmail.com', true, 'manager'))
       .end((err, res) => {
         expect(res.status).to.equal(200);
-        expect(res.body.data.length).to.equal(3);
         done();
       });
   });

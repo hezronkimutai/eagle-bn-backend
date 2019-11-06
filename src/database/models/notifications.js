@@ -7,7 +7,7 @@ module.exports = (Sequelize, DataTypes) => {
       allowNull: false,
       validate: {
         isIn: {
-          args: [['Requests', 'Accommodations']],
+          args: [['Requests', 'Accommodations', 'Comments']],
           msg: 'That table doesn\'t exist',
         },
       },
@@ -17,7 +17,7 @@ module.exports = (Sequelize, DataTypes) => {
       allowNull: false,
       validate: {
         isIn: {
-          args: [['new_request', 'request_approved', 'request_rejected']],
+          args: [['new_request', 'request_approved', 'request_rejected', 'new_comment']],
           msg: 'Invalid value',
         },
       },

@@ -1,15 +1,6 @@
 import ChatService from '../services/chat.service';
 import sendResult from '../utils/sendResult';
-
-const sendChatEcho = (receiverId, data, connectedClients, io) => {
-  if (!receiverId) {
-    io.emit('new_message', data);
-  } else if (connectedClients[receiverId.toString()]) {
-    connectedClients[receiverId.toString()].forEach(element => {
-      io.to(element).emit('new_message', data);
-    });
-  }
-};
+import EchoUtil from '../utils/echo.util';
 
 const ChatsController = {
   async postChat(req, res) {
@@ -22,7 +13,7 @@ const ChatsController = {
       receiverId
     };
     const result = await ChatService.addChat(chat);
-    sendChatEcho(receiverId, result, req.connectedClients, io);
+    EchoUtil.echo(receiverId, result, req.connectedClients, io, 'new_message');
     sendResult(res, 201, 'chat posted successfully', result);
   },
 

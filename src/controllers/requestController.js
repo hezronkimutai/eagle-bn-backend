@@ -10,6 +10,7 @@ import RequestService from '../services/request.service';
 import NotificationService from '../services/notifications.service';
 import UserService from '../services/user.service';
 import EmailService from '../services/email.service';
+import NotificationUtil from '../utils/notification.util';
 
 const { Op } = Sequelize;
 
@@ -52,12 +53,13 @@ const Request = {
     // GETTING LINEMANAGER OF THE REQUESTER
     const { lineManager } = await UserService.getUser({ id: Req.UserId });
     // CREATING NOTIFICATION OF THIS NEW REQUEST FOR THE MANAGER
-    await NotificationService.createNotification({
+    const notification = await NotificationService.createNotification({
       modelName: 'Requests',
       modelId: Req.id,
       type: 'new_request',
       userId: lineManager,
     });
+    NotificationUtil.echoNotification(req, notification, 'new_request', lineManager);
     // CHECK IF MANAGER IS SUBSCRIBED TO EMAIL NOTIFICATION
     const user = await UserService.getUser({ id: lineManager });
     if (user.recieveEmails) {

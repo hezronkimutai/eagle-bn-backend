@@ -15,8 +15,7 @@
     "exclude": [
       "**/**/**/swaggerDefinition.js",
       "**/**/**/index.js",
-      "**/**/**/sendResult.js",
-      "**/**/**/validator.js"
+      "**/**/utils/**"
     ],
     "sourceMap": false,
     "instrument": false
