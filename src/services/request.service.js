@@ -8,21 +8,14 @@ const RequestService = {
     return result;
   },
 
-  async getAllRequests() {
-    const result = await db.Requests.findAll({
-      include: { model: db.Trips, attributes: { exclude: ['RequestId'] } }
-    });
-    return result;
+  async createRequest(request) {
+    const requestResult = await db.Requests.create(request);
+    return requestResult.get({ plain: true });
   },
 
-  async createRequest(country, city, returnTime, timeZone, UserId, trips) {
-    const requestResult = await db.Requests.create({ country, city, returnTime, timeZone, UserId, status: 'pending' });
-    const request = requestResult.get({ plain: true });
-    trips.forEach(trip => {
-      trip.RequestId = requestResult.id;
-    });
-    request.trips = await db.Trips.bulkCreate(trips);
-    return request;
+  async createTrip(trip) {
+    const requestResult = await db.Trips.create(trip);
+    return requestResult.get({ plain: true });
   },
 
   async updateRequest(newRequestData, request) {

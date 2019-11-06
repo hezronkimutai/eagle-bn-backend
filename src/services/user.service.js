@@ -2,6 +2,14 @@ import db from '../database/models/index';
 import helpers from '../utils/helper';
 
 const UserService = {
+  async getUser(condition) {
+    return db.Users.findOne({ where: condition, raw: true });
+  },
+
+  async manageUserSubscription(id, receiveEmails) {
+    return db.Users.update({ receiveEmails }, { where: { id } });
+  },
+
   async getUserByEmail(email) {
     const newUser = await db.Users.findOne({
       where: { email },
