@@ -21,7 +21,7 @@ const Accommodation = {
       currency: (currency) || 'USD',
     });
     const accommodation = response.get({ plain: true });
-    uploadService.uploadImages(req, res, accommodation);
+    uploadService.uploadImages(req, res, accommodation, 'Accomodation Added');
   },
 
   async getAccommodations(req, res) {
