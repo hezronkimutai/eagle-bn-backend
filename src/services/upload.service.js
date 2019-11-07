@@ -45,8 +45,3 @@ const uploadService = {
 };
 
 export default uploadService;
-
-// fileUpload({
-//   useTempFiles: true,
-//   tempFileDir: path.join(__dirname, '../temp'),
-// })
