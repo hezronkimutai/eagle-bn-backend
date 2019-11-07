@@ -1,32 +1,7 @@
 import sendResult from '../utils/sendResult';
 import db from '../database/models/index';
-import cloudinary from '../config/clound-config';
+import uploadService from '../services/upload.service';
 
-let success = 0;
-let failure = 0;
-
-const checkIfAllUploaded = (total, res, data, msg) => {
-  if (success + failure === total) return sendResult(res, 201, msg, data);
-};
-
-const uploadImages = (req, res, data, msg) => {
-  if (!req.imageArray) return sendResult(res, 200, msg, data);
-  const numberofImages = req.imageArray.length;
-  data.images = [];
-  req.imageArray.forEach((element) => {
-    cloudinary.uploader.upload(element.tempFilePath, async (result, error) => {
-      if (error) { failure += 1; checkIfAllUploaded(numberofImages, res, data, msg); }
-
-      const imageRes = await db.AccommodationImages.create({
-        imageurl: result.url,
-        accommodationid: data.id,
-      });
-      data.images.push(imageRes.imageurl);
-      success += 1;
-      checkIfAllUploaded(numberofImages, res, data, msg);
-    });
-  });
-};
 
 const Accommodation = {
   async addAccommodation(req, res) {
@@ -46,7 +21,7 @@ const Accommodation = {
       currency: (currency) || 'USD',
     });
     const accommodation = response.get({ plain: true });
-    uploadImages(req, res, accommodation);
+    uploadService.uploadImages(req, res, accommodation);
   },
 
   async getAccommodations(req, res) {
@@ -89,7 +64,7 @@ const Accommodation = {
       raw: true,
       include: [{ model: db.AccommodationImages, attributes: { exclude: ['id', 'accommodationid', 'createdAt', 'updatedAt'] } }],
     });
-    uploadImages(req, res, returnData, 'Accommodation data/images updated successfully');
+    uploadService.uploadImages(req, res, returnData, 'Accommodation data/images updated successfully');
   },
 
   async deleteAccommodation(req, res) {

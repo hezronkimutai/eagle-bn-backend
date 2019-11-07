@@ -1,7 +1,5 @@
 import express from 'express';
 import passport from 'passport';
-import fileUpload from 'express-fileupload';
-import path from 'path';
 import userController from '../controllers/userController';
 import email from '../controllers/email';
 import checkRole from '../validation/checkRoles';
@@ -11,6 +9,7 @@ import UserMiddle from '../middlewares/userMiddlware';
 import valid from '../validation';
 import '../config/passport';
 import isUserVerified from '../middlewares/checkIsverified';
+import uploadService from '../services/upload.service';
 
 const app = express.Router();
 
@@ -341,11 +340,6 @@ app.use(passport.initialize());
 *     - new_role
 * */
 
-const uploadfile = fileUpload({
-  useTempFiles: true,
-  tempFileDir: path.join(__dirname, '../temp'),
-});
-
 const { verifyToken, cloudUpload, getUserbyEmail } = UserMiddle;
 const { updateProfile, getProfile, userSubscription } = userController;
 
@@ -357,7 +351,7 @@ app.patch('/reset-password/:token', UserMiddle.validatePass, email.resetPass);
 app.post('/auth/facebook', passport.authenticate('facebook-token'), userController.OauthLogin);
 app.post('/auth/google', passport.authenticate('google-plus-token'), userController.OauthLogin);
 app.get('/profile', verifyToken, getUserbyEmail, getProfile);
-app.patch('/profile', uploadfile, verifyToken, valid.profile, cloudUpload, updateProfile);
+app.patch('/profile', uploadService.fileUpload, verifyToken, valid.profile, cloudUpload, updateProfile);
 app.put('/role', checkRole, checkAdmin, UserMiddle.getUserbyEmail, isUserVerified, role.changeRole);
 app.get('/roles', checkAdmin, role.allRole);
 app.get('/email/:subscription/:token', verifyToken, userSubscription);
