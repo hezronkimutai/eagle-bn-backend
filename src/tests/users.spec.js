@@ -206,3 +206,41 @@ describe('Password Reset', () => {
       });
   });
 });
+
+describe('logout functionality', () => {
+  it('check for successfull logout', (done) => {
+    chai.request(app)
+      .patch('/api/v1/users/logout')
+      .set('Authorization', helpers.createToken(3, 'requester@gmail.com', true, 'requester'))
+      .end((err, res) => {
+        res.should.have.status(200);
+        res.body.should.be.a('object');
+        res.body.should.have.property('msg').eql('Logout successful');
+        done();
+      });
+  });
+  it('Should test for alphanumeric value', (done) => {
+    chai.request(app)
+      .get('/api/v1/users/profile')
+      .set('Authorization', helpers.createToken(3, 'requester@gmail.com', true, 'requester'))
+      .end((err, res) => {
+        res.should.have.status(401);
+        res.body.should.be.a('object');
+        res.body.should.have.property('msg').eql('You need to login first');
+        done();
+      });
+  });
+
+  it('should return a 401 when you are not owner of the request or manager', (done) => {
+    chai.request(app)
+      .put('/api/v1/requests/1/comments/1')
+      .send({ comment: 'new Comment' })
+      .set('Authorization', helpers.createToken(3, 'requester@gmail.com', true, 'requester'))
+      .end((err, res) => {
+        res.should.have.status(401);
+        res.body.should.be.a('object');
+        res.body.should.have.property('msg').eql('You need to login first');
+        done();
+      });
+  });
+});

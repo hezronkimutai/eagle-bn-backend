@@ -51,11 +51,12 @@ const User = {
     }
   },
 
-  verifyToken(req, res, next) {
+  async verifyToken(req, res, next) {
     const token = helper.getToken(req);
     if (!token) return sendResult(res, 400, 'provide token to get access');
-
     const userData = helper.decodeToken(token);
+    const user = await UserService.getOneUser(userData.userId);
+    if (user.isLogged === false) return sendResult(res, 401, 'You need to login first');
     if (userData.error) return sendResult(res, 400, userData.error);
     req.user = userData;
     next();
@@ -77,9 +78,11 @@ const User = {
     next();
   },
 
-  checkToken(req, res, next) {
+  async checkToken(req, res, next) {
     const token = helper.getToken(req);
     const data = helper.verifyToken(token);
+    const user = await UserService.getOneUser(data.userId);
+    if (user.isLogged === false) return sendResult(res, 401, 'You need to login first');
     if (data.error) {
       return sendResult(res, 401, 'You are not authorized');
     }

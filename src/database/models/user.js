@@ -63,6 +63,11 @@ module.exports = (sequelize, DataTypes) => {
     lineManager: DataTypes.INTEGER,
     RoleId: DataTypes.INTEGER,
     rememberMe: DataTypes.BOOLEAN,
+    isLogged: {
+      type: DataTypes.BOOLEAN,
+      defaultValue: false,
+      allowNull: false
+    },
     recieveEmails: {
       type: DataTypes.BOOLEAN,
       defaultValue: true,

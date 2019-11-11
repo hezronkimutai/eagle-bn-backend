@@ -118,17 +118,7 @@ describe('PUT /comment/:commentId', () => {
         done();
       });
   });
-  it('should return a 401 when you are not owner of the request or manager', (done) => {
-    chai.request(app)
-      .put('/api/v1/requests/1/comments/1')
-      .send({ comment: 'new Comment' })
-      .set('Authorization', helpers.createToken(75, 'admin@gmail.com', true, 'kjhg'))
-      .end((err, res) => {
-        expect(res.status).to.equal(401);
-        expect(res.body.status).to.equal(401);
-        done();
-      });
-  });
+
   it('it should return 404 when comment id does not exist', (done) => {
     chai.request(app)
       .put('/api/v1/requests/1/comments/1000')

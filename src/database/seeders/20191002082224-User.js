@@ -9,6 +9,7 @@ module.exports = {
       isverified: true,
       RoleId:6,
       rememberMe: false,
+      isLogged: true,
       createdAt: new Date(),
       updatedAt: new Date()
     },{
@@ -19,7 +20,8 @@ module.exports = {
       createdAt: new Date(),
       updatedAt: new Date(),
       RoleId:1,
-      rememberMe: false
+      rememberMe: false,
+      isLogged: true
     },{
       fullname: 'requester',
       email: 'requester@gmail.com',
@@ -28,7 +30,8 @@ module.exports = {
       createdAt: new Date(),
       updatedAt: new Date(),
       RoleId:5,
-      rememberMe: false
+      rememberMe: false,
+      isLogged: true
     },{
       fullname: 'dummy',
       email: 'dummy@gmail.com',
@@ -37,7 +40,8 @@ module.exports = {
       createdAt: new Date(),
       updatedAt: new Date(),
       RoleId:5,
-      rememberMe: false
+      rememberMe: false,
+      isLogged: true
     },{
       fullname: 'Tadmin',
       email: 'tadmin@gmail.com',
@@ -46,7 +50,8 @@ module.exports = {
       createdAt: new Date(),
       updatedAt: new Date(),
       RoleId:2,
-      rememberMe: false
+      rememberMe: false,
+      isLogged: true
     },
     {
       fullname: 'manager',
@@ -56,7 +61,8 @@ module.exports = {
       createdAt: new Date(),
       updatedAt: new Date(),
       RoleId: 4,
-      rememberMe: false
+      rememberMe: false,
+      isLogged: true
   }])
   ]),
   down: (queryInterface, Sequelize) => Promise.all([
