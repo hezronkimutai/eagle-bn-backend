@@ -59,7 +59,7 @@ const Accommodation = {
   },
 
   async accommodationExists(req, res, next) {
-    const { AccommodationId } = req.body;
+    const AccommodationId = req.body.AccommodationId || req.params.accommodationId;
     if (await AccommodationService.getAccommodation(AccommodationId)) {
       return next();
     }

@@ -83,7 +83,7 @@ const fUpload = fileUpload({
 });
 
 const {
-  isSupplierAccommodation, checkForImages, checkForImagesUpdate
+  isSupplierAccommodation, checkForImages, checkForImagesUpdate, accommodationExists
 } = AccommodationMiddleware;
 const { checkToken } = UserMiddleware;
 
@@ -91,13 +91,18 @@ app.patch('/:id', fUpload, checkToken, RoleMiddleware.checkHostOrTAdmin, isSuppl
 app.delete('/:id', checkToken, RoleMiddleware.checkHost, isSupplierAccommodation, AccommodationsController.deleteAccommodation);
 app.post('/', fUpload, checkToken, RoleMiddleware.checkHostOrTAdmin, valid.accommodation, checkForImages, AccommodationsController.addAccommodation);
 app.get('/', AccommodationsController.getAccommodations);
-app.get('/:accommodationId/rating', valid.getReviewvalidation, BookingsController.getRating);
+app.get('/:accommodationId/rating', valid.accommodationId, BookingsController.getRating);
 app.get('/search', AccommodationsController.getAccommodationsByFilter);
+app.get('/bookmarked', checkToken, AccommodationsController.getBookmarkedAccommodations);
 app.get('/:accommodationId', AccommodationsController.getAccommodationById);
 app.post('/:accommodationId/like', [
   checkToken,
   LikingsController.addLikeAccommdation
 ]);
-
-
+app.post('/:accommodationId/bookmark', [checkToken, valid.accommodationId,
+  accommodationExists,
+  AccommodationsController.bookmarkAccommodation]);
+app.delete('/:accommodationId/bookmark', [checkToken, valid.accommodationId,
+  accommodationExists,
+  AccommodationsController.undoBookmark]);
 export default app;

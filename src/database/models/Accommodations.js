@@ -93,6 +93,12 @@ module.exports = (sequelize, DataTypes) => {
     foreignKey: 'accommodationid',
     targetKey: 'id',
   });
+  Accommodation.hasMany(models.Bookmarks, {
+    foreignKey: {
+      allowNull: true,
+    },
+    onDelete: 'SET NULL',
+});
   };
   return Accommodation;
 };

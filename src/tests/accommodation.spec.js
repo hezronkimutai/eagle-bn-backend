@@ -216,4 +216,33 @@ describe('accommodation tests', () => {
         done();
       });
   });
+  it('should return 201 status when creating a bookmark ', (done) => {
+    chai.request(app)
+      .post('/api/v1/accommodations/1/bookmark')
+      .set('Authorization', helper.createToken(3, 'requester@gmail.com', true, 'requester'))
+      .end((err, res) => {
+        expect(res.status).to.equal(201);
+        expect(res.body.msg).to.equals('Accommodation bookmarked Successfully');
+        done();
+      });
+  });
+  it('should return 200 status and bookmarked accommodations', (done) => {
+    chai.request(app)
+      .get('/api/v1/accommodations/bookmarked')
+      .set('Authorization', helper.createToken(3, 'requester@gmail.com', true, 'requester'))
+      .end((err, res) => {
+        expect(res.status).to.equal(200);
+        expect(res.body.data.length).to.equals(1);
+        done();
+      });
+  });
+  it('should return 200 and delete a bookmark', (done) => {
+    chai.request(app)
+      .delete('/api/v1/accommodations/1/bookmark')
+      .set('Authorization', helper.createToken(3, 'requester@gmail.com', true, 'requester'))
+      .end((err, res) => {
+        expect(res.status).to.equal(200);
+        done();
+      });
+  });
 });

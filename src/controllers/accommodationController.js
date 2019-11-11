@@ -1,6 +1,7 @@
 import sendResult from '../utils/sendResult';
 import db from '../database/models/index';
 import cloudinary from '../config/clound-config';
+import BookmarkService from '../services/bookmark.service';
 
 let success = 0;
 let failure = 0;
@@ -106,5 +107,29 @@ const Accommodation = {
     }
   },
 
+  async bookmarkAccommodation(req, res) {
+    const { userId } = req.userData;
+    const { accommodationId } = req.params;
+
+    const bookmarkData = { UserId: userId, AccommodationId: accommodationId };
+    const result = await BookmarkService.bookmark(bookmarkData);
+    const status = result[1] ? 201 : 200;
+    return sendResult(res, status, 'Accommodation bookmarked Successfully');
+  },
+
+  async undoBookmark(req, res) {
+    const { userId } = req.userData;
+    const { accommodationId } = req.params;
+
+    const bookmarkData = { UserId: userId, AccommodationId: accommodationId };
+    await BookmarkService.undoBookmark(bookmarkData);
+    return sendResult(res, 200, 'Accommodation bookmark deleted Successfully');
+  },
+
+  async getBookmarkedAccommodations(req, res) {
+    const { userId } = req.userData;
+    const result = await BookmarkService.getBookmarkedAccommodation(userId);
+    return sendResult(res, 200, 'bookmarked accommodations', result);
+  }
 };
 export default Accommodation;
